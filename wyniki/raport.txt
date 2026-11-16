@@ -1,0 +1,100 @@
+RAPORT JAKOŚCI DANYCH
+Plik: dane/housing.csv
+Utworzono: 2026-11-16 20:49:18
+
+1. DANE SUROWE
+Rekordy: 20640
+Kolumny: 10
+Pełne duplikaty: 0
+
+                        typ  braki  braki_proc  unikalne
+longitude           float64      0         0.0       844
+latitude            float64      0         0.0       862
+housing_median_age  float64      0         0.0        52
+total_rooms         float64      0         0.0      5926
+total_bedrooms      float64    207         1.0      1923
+population          float64      0         0.0      3888
+households          float64      0         0.0      1815
+median_income       float64      0         0.0     12928
+median_house_value  float64      0         0.0      3842
+ocean_proximity         str      0         0.0         5
+
+                      count       mean        std       min        25%        50%        75%        max
+longitude           20640.0    -119.57       2.00   -124.35    -121.80    -118.49    -118.01    -114.31
+latitude            20640.0      35.63       2.14     32.54      33.93      34.26      37.71      41.95
+housing_median_age  20640.0      28.64      12.59      1.00      18.00      29.00      37.00      52.00
+total_rooms         20640.0    2635.76    2181.62      2.00    1447.75    2127.00    3148.00   39320.00
+total_bedrooms      20433.0     537.87     421.39      1.00     296.00     435.00     647.00    6445.00
+population          20640.0    1425.48    1132.46      3.00     787.00    1166.00    1725.00   35682.00
+households          20640.0     499.54     382.33      1.00     280.00     409.00     605.00    6082.00
+median_income       20640.0       3.87       1.90      0.50       2.56       3.53       4.74      15.00
+median_house_value  20640.0  206855.82  115395.62  14999.00  119600.00  179700.00  264725.00  500001.00
+
+2. REGUŁY JAKOŚCI NA DANYCH SUROWYCH (tylko wykrycie, bez zmian)
+Zakresy poprawnych wartości:
+           kolumna  min    max  rekordy_poza_zakresem
+         longitude -125   -114                      0
+          latitude   32     42                      0
+housing_median_age    1    100                      0
+       total_rooms    1      -                      0
+    total_bedrooms    0      -                      0
+        population    1      -                      0
+        households    1      -                      0
+     median_income    0      -                      0
+median_house_value    0 500001                      0
+
+Wartości odstające metodą IQR, k = 1.5:
+      kolumna  dolna_granica  gorna_granica  odstajace
+median_income          -0.71           8.01        681
+  total_rooms       -1102.62        5698.38       1287
+   population        -620.00        3132.00       1196
+
+3. WYKONANE OPERACJE
+               czas                              operacja                                      parametry  rekordy_przed  rekordy_po  zmienione_rekordy
+2026-11-16 20:49:17          Usunięcie pełnych duplikatów                              wszystkie kolumny          20640       20640                  0
+2026-11-16 20:49:17       Wartości spoza zakresu na braki         kolumna=longitude, zakres=[-125, -114]          20640       20640                  0
+2026-11-16 20:49:17       Wartości spoza zakresu na braki              kolumna=latitude, zakres=[32, 42]          20640       20640                  0
+2026-11-16 20:49:17       Wartości spoza zakresu na braki    kolumna=housing_median_age, zakres=[1, 100]          20640       20640                  0
+2026-11-16 20:49:17       Wartości spoza zakresu na braki          kolumna=total_rooms, zakres=[1, None]          20640       20640                  0
+2026-11-16 20:49:17       Wartości spoza zakresu na braki       kolumna=total_bedrooms, zakres=[0, None]          20640       20640                  0
+2026-11-16 20:49:17       Wartości spoza zakresu na braki           kolumna=population, zakres=[1, None]          20640       20640                  0
+2026-11-16 20:49:17       Wartości spoza zakresu na braki           kolumna=households, zakres=[1, None]          20640       20640                  0
+2026-11-16 20:49:17       Wartości spoza zakresu na braki        kolumna=median_income, zakres=[0, None]          20640       20640                  0
+2026-11-16 20:49:17       Wartości spoza zakresu na braki kolumna=median_house_value, zakres=[0, 500001]          20640       20640                  0
+2026-11-16 20:49:17                   Uzupełnienie braków       kolumna=total_bedrooms, strategia=median          20640       20640                207
+2026-11-16 20:49:17 Oznaczenie wartości odstających (IQR)                   kolumna=median_income, k=1.5          20640       20640                681
+2026-11-16 20:49:17 Oznaczenie wartości odstających (IQR)                     kolumna=total_rooms, k=1.5          20640       20640               1287
+2026-11-16 20:49:17 Oznaczenie wartości odstających (IQR)                      kolumna=population, k=1.5          20640       20640               1196
+
+4. DANE PO CZYSZCZENIU
+Rekordy: 20640
+Kolumny: 13
+Pełne duplikaty: 0
+
+                           typ  braki  braki_proc  unikalne
+longitude              float64      0         0.0       844
+latitude               float64      0         0.0       862
+housing_median_age     float64      0         0.0        52
+total_rooms            float64      0         0.0      5926
+total_bedrooms         float64      0         0.0      1923
+population             float64      0         0.0      3888
+households             float64      0         0.0      1815
+median_income          float64      0         0.0     12928
+median_house_value     float64      0         0.0      3842
+ocean_proximity            str      0         0.0         5
+median_income_outlier     bool      0         0.0         2
+total_rooms_outlier       bool      0         0.0         2
+population_outlier        bool      0         0.0         2
+
+5. PORÓWNANIE BRAKÓW PRZED I PO
+                    braki_przed  braki_po
+longitude                     0         0
+latitude                      0         0
+housing_median_age            0         0
+total_rooms                   0         0
+total_bedrooms              207         0
+population                    0         0
+households                    0         0
+median_income                 0         0
+median_house_value            0         0
+ocean_proximity               0         0

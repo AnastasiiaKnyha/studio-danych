@@ -22,10 +22,12 @@ RANGE_RULES = [
     ("households", 1, None),
     ("median_income", 0, None),
     ("median_house_value", 0, 500001),
+        # rule for the small test file samples/braki.csv
+    ("wiek", 0, 120),
 ]
 
 # outliers in these columns are only marked, not removed
-OUTLIER_COLUMNS = ["median_income", "total_rooms", "population"]
+OUTLIER_COLUMNS = ["median_income", "total_rooms", "population", "dochod"]
 IQR_FACTOR = 1.5
 
 
