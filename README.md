@@ -12,14 +12,14 @@ Aplikacja prowadzi od wczytania pliku CSV przez sprawdzenie i czyszczenie danych
 | Etap | Zakres | Status |
 |---|---|---|
 | Lab 6 | profil danych, reguły jakości, czyszczenie, raport przed i po | gotowe |
-| Lab 7 | wykresy w Matplotlib i Seaborn | w planach |
+| Lab 7 | wykresy w Matplotlib i Seaborn, korelacja | gotowe |
 | Lab 8 | okienko w Tkinterze | w planach |
 | Lab 9 | wykres w okienku, eksport, dokumentacja | w planach |
 
 ## Wymagania
 
 - Python 3.10 lub nowszy
-- biblioteki pandas i pytest, są w pliku requirements.txt
+- biblioteki pandas, matplotlib, seaborn i pytest, są w pliku requirements.txt
 
 ## Instalacja
 
@@ -52,6 +52,35 @@ python3 run_lab6.py samples/braki.csv wyniki/braki
 ```
 
 Pierwszy argument to plik CSV, a drugi to folder na wyniki. Można tak podać dowolny poprawny plik CSV.
+
+## Wykresy
+
+Wykresy dla danych przed i po czyszczeniu
+
+```
+python3 run_lab7.py
+```
+
+Najpierw trzeba uruchomić `run_lab6.py`, bo wykresy korzystają z pliku `wyniki/cleaned.csv`. Wykresy zapisują się w folderze `wyniki/wykresy` jako PNG, a macierz korelacji także jako SVG.
+
+| Wykres | Jakie kolumny przyjmuje |
+|---|---|
+| histogram | jedna kolumna liczbowa |
+| punktowy | dwie różne kolumny liczbowe, w tytule jest współczynnik korelacji |
+| pudełkowy | kolumna liczbowa i opcjonalnie kolumna z kategoriami jako grupy |
+| słupkowy | kolumna z najwyżej 20 kategoriami |
+
+Program blokuje wykres z komunikatem, gdy kolumna ma zły typ, ma tylko jedną wartość albo ma za dużo kategorii. Kolumny z wartościami True i False są traktowane jak kategorie.
+
+## Wnioski z wykresów
+
+- Dochód i wartość domu mają korelację 0,69. W okręgach z wyższym dochodem domy są zwykle droższe. To tylko korelacja, a nie dowód, że dochód powoduje wyższą cenę. Oba mogą zależeć od położenia okręgu.
+- Na wykresie punktowym widać poziomą linię przy wartości 500001. To górny limit w danych, a nie prawdziwa cena domów.
+- Liczba pokoi, sypialni, mieszkańców i gospodarstw ma korelacje od 0,86 do 0,97. Wszystkie te kolumny rosną razem z wielkością okręgu, więc jedna nie powoduje drugiej.
+- Długość i szerokość geograficzna mają korelację minus 0,92. To wynika z kształtu Kalifornii, której wybrzeże biegnie ukośnie.
+- Domy w głębi lądu (INLAND) mają medianę wartości około 108500, a przy oceanie około 215000 do 234000. Kategoria ISLAND ma tylko 5 rekordów, więc wniosek dla niej jest niepewny.
+- Po uzupełnieniu braków medianą 207 wartości total_bedrooms trafiło do jednego przedziału przy 435. Kształt rozkładu się nie zmienił, ale to jest skutek uboczny imputacji.
+- Rozkład dochodu jest prawostronnie skośny. 681 okręgów ma dochód powyżej 8,01 i są oznaczone jako odstające. To prawdziwe zamożne okręgi, dlatego ich nie usuwam.
 
 ## Jak działa czyszczenie
 
@@ -96,7 +125,7 @@ Wartości odstające są wykrywane metodą IQR. Wartość jest odstająca, gdy j
 pytest -v
 ```
 
-Jest 20 testów. Sprawdzają wczytywanie z różnymi separatorami, błędne pliki, wszystkie operacje czyszczenia, to, że operacje nie zmieniają innych kolumn, dziennik zmian i powrót do danych surowych.
+Jest 36 testów. Sprawdzają wczytywanie z różnymi separatorami, błędne pliki, wszystkie operacje czyszczenia, to, że operacje nie zmieniają innych kolumn, dziennik zmian, powrót do danych surowych oraz wykresy, czyli tytuły i opisy osi, blokowanie złych kolumn i zapis do PNG i SVG.
 
 ## Wykorzystanie AI
 
@@ -107,3 +136,5 @@ Przy pracy korzystałam z pomocy AI (Claude). Pomógł mi zrobić plan realizacj
 - pandas.read_csv https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html
 - Pandas User Guide https://pandas.pydata.org/docs/user_guide/index.html
 - zbiór California Housing https://github.com/ageron/handson-ml/tree/master/datasets/housing
+- Matplotlib https://matplotlib.org/stable/users/index.html
+- Seaborn https://seaborn.pydata.org/tutorial.html
