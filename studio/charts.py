@@ -4,7 +4,7 @@ import pandas as pd
 import seaborn as sns
 from matplotlib.figure import Figure
 
-from studio.columns import category_values, numeric_columns, numeric_values
+from studio.columns import category_columns, category_values, numeric_columns, numeric_values
 from studio.errors import DataError
 
 # every function returns a Figure, so the same chart can be saved to a file or shown in the window later
@@ -126,6 +126,20 @@ def compare_histograms(before: pd.DataFrame, after: pd.DataFrame, column: str) -
     fig.suptitle(f"Rozkład {column} przed i po czyszczeniu")
     fig.tight_layout()
     return fig
+
+def columns_for_chart(frame: pd.DataFrame, kind: str) -> tuple[list[str], list[str]]:
+    # lists for the first and the second column of every chart
+    numbers = numeric_columns(frame)
+    categories = category_columns(frame)
+    if kind == "histogram":
+        return numbers, []
+    if kind == "scatter":
+        return numbers, numbers
+    if kind == "box":
+        return numbers, categories
+    if kind == "bar":
+        return categories, []
+    raise DataError(f"Nieznany rodzaj wykresu \"{kind}\". Wybierz jeden z: {', '.join(CHART_KINDS)}.")
 
 
 def build_figure(frame: pd.DataFrame, kind: str, x: str, y: str | None = None) -> Figure:
